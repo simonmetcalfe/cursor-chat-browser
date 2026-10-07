@@ -5,7 +5,7 @@ import pdfMake from 'pdfmake/build/pdfmake'
 import pdfFonts from 'pdfmake/build/vfs_fonts'
 
 // Initialize pdfmake with fonts
-pdfMake.vfs = pdfFonts.pdfMake.vfs
+pdfMake.vfs = pdfFonts
 
 export async function POST(request: Request) {
   try {
@@ -156,9 +156,9 @@ export async function POST(request: Request) {
     // Generate PDF
     const pdfDoc = pdfMake.createPdf(docDefinition)
     
-    return new Promise((resolve) => {
+    return new Promise<NextResponse>((resolve) => {
       pdfDoc.getBuffer((buffer) => {
-        resolve(new NextResponse(buffer, {
+        resolve(new NextResponse(new Uint8Array(buffer), {
           headers: {
             'Content-Type': 'application/pdf',
             'Content-Disposition': `attachment; filename="${title}.pdf"`

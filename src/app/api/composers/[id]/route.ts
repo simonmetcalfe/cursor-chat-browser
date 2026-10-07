@@ -8,8 +8,9 @@ import { resolveWorkspacePath } from '@/utils/workspace-path'
 
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  ctx: { params: Promise<{ id: string }> }
 ) {
+  const params = await ctx.params
   try {
     const workspacePath = resolveWorkspacePath()
     const entries = await fs.readdir(workspacePath, { withFileTypes: true })
